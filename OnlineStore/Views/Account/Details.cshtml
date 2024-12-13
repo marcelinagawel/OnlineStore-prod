@@ -1,0 +1,48 @@
+﻿@model OnlineStore.Models.User
+
+@{
+    ViewData["Title"] = "Szczegóły konta";
+}
+
+<h1 class="mb-4">Szczegóły konta</h1>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <p><strong>Imię:</strong> @Model.Name</p>
+        <p><strong>Email:</strong> @Model.Email</p>
+        <a href="/Account/Logout" class="btn btn-danger mt-3">Wyloguj</a>
+    </div>
+</div>
+
+<h2 class="mt-4">Twoje zamówienia</h2>
+
+@if (Model.Orders != null && Model.Orders.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID Zamówienia</th>
+                <th>Data</th>
+                <th>Liczba produktów</th>
+                <th>Łączna kwota</th>
+               
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model.Orders)
+            {
+                <tr>
+                    <td>@order.Id</td>
+                    <td>@order.OrderDate.ToString("g")</td>
+                    <td>@order.OrderProducts.Sum(op => op.Quantity)</td>
+                    <td>@order.OrderProducts.Sum(op => op.Quantity * op.Product.Price).ToString("C")</td>
+                   
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">Nie masz jeszcze żadnych zamówień.</div>
+}

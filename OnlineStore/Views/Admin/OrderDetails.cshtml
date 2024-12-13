@@ -1,0 +1,39 @@
+﻿@model OnlineStore.Models.Order
+
+@{
+    ViewData["Title"] = "Szczegóły zamówienia";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1 class="mb-4">Szczegóły zamówienia</h1>
+
+<p><strong>Numer zamówienia:</strong> @Model.Id</p>
+<p><strong>Data zamówienia:</strong> @Model.OrderDate.ToString("g")</p>
+<p><strong>Użytkownik:</strong> @Model.User.Name (@Model.User.Email)</p>
+
+<h2 class="mt-4">Produkty w zamówieniu</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Produkt</th>
+            <th>Ilość</th>
+            <th>Cena jednostkowa</th>
+            <th>Łączna cena</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderProducts)
+        {
+            <tr>
+                <td>@item.Product.Name</td>
+                <td>@item.Quantity</td>
+                <td>@item.Product.Price.ToString("C")</td>
+                <td>@(item.Quantity * item.Product.Price).ToString("C")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<p><strong>Łączna kwota zamówienia:</strong> @Model.OrderProducts.Sum(op => op.Quantity * op.Product.Price).ToString("C")</p>
+
+<a href="/Admin/Orders" class="btn btn-secondary mt-3">Wróć do listy zamówień</a>

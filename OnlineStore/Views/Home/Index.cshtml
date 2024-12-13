@@ -1,0 +1,25 @@
+﻿@model IEnumerable<OnlineStore.Models.Product>
+
+@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="hero bg-primary text-white text-center py-5">
+    <h1 class="display-4">Witamy w OnlineStore!</h1>
+    <p class="lead">Znajdź najlepsze produkty dla siebie</p>
+</div>
+
+<div class="container my-5">
+    <h2 class="mb-4">Najnowsze produkty</h2>
+    <div class="row">
+        @foreach (var product in Model)
+        {
+            <div class="col-md-4 col-lg-3 mb-4">
+                @Html.Partial("_ProductCard", product)
+            </div>
+        }
+    </div>
+    <div class="text-center">
+        <a href="/Home/AllProducts" class="btn btn-outline-primary btn-lg">Zobacz wszystkie produkty</a>
+    </div>
+</div>

@@ -1,0 +1,17 @@
+﻿@model OnlineStore.Models.Category
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1 class="mb-4">Dodaj nową kategorię</h1>
+
+<form asp-action="CreateCategory" method="post" class="p-4 bg-light rounded shadow">
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">Nazwa kategorii</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Zapisz</button>
+</form>

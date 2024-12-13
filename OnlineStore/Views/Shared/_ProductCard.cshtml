@@ -1,0 +1,15 @@
+﻿@model OnlineStore.Models.Product
+
+<div class="card h-100 shadow-sm">
+    <img src="@Model.Image" class="card-img-top" alt="@Model.Name" style="height: 200px; object-fit: cover;" />
+    <div class="card-body">
+        <h5 class="card-title">@Model.Name</h5>
+        <p class="card-text text-muted">@Model.Price.ToString("C")</p>
+
+        <form method="post" action="/Cart/AddToCart">
+            <input type="hidden" name="productId" value="@Model.Id" />
+            <input type="hidden" name="qty" value="1" />
+            <button type="submit" class="btn btn-primary w-100">Dodaj do koszyka</button>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,17 @@
+﻿@model IEnumerable<OnlineStore.Models.Product>
+
+@{
+    ViewData["Title"] = "Wszystkie produkty";
+}
+
+<div class="container my-5">
+    <h1 class="mb-4">Wszystkie produkty</h1>
+    <div class="row">
+        @foreach (var product in Model)
+        {
+            <div class="col-md-4 col-lg-3 mb-4">
+                @Html.Partial("_ProductCard", product)
+            </div>
+        }
+    </div>
+</div>

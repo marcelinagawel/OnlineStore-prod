@@ -1,0 +1,39 @@
+﻿@model IEnumerable<OnlineStore.Models.Product>
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1 class="mb-4">Lista produktów</h1>
+<a href="/Admin/CreateProduct" class="btn btn-success mb-3">Dodaj nowy produkt</a>
+
+<table class="table table-striped table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>#</th>
+            <th></th>
+            <th>Nazwa</th>
+            <th>Cena</th>
+            <th>Ilość</th>
+            <th>Kategoria</th>
+            <th>Akcje</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>@product.Id</td>
+                <td> <img src="@product.Image" alt="Miniaturka" style="width: 100px; height: auto;" /></td>
+                <td>@product.Name</td>
+                <td>@product.Price</td>
+                <td>@product.Quantity</td>
+                <td>@product.Category?.Name</td>
+                <td>
+                    <a href="/Admin/EditProduct/@product.Id" class="btn btn-primary btn-sm">Edytuj</a>
+                    <a href="/Admin/DeleteProduct/@product.Id" class="btn btn-danger btn-sm">Usuń</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
