@@ -86,35 +86,5 @@ namespace OnlineStore.Controllers
 
             return View(user);
         }
-
-        // Rejestracja użytkownika
-        [HttpGet]
-        public IActionResult Register()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult Register(User newUser)
-        {
-            if (ModelState.IsValid)
-            {
-                // Ustawianie domyślnych wartości
-                newUser.IsAdmin = false; // Nowi użytkownicy nie są administratorami
-                _context.Users.Add(newUser);
-                _context.SaveChanges();
-
-                // Automatyczne logowanie po rejestracji
-                Response.Cookies.Append("UserId", newUser.Id.ToString(), new CookieOptions
-                {
-                    HttpOnly = true,
-                    Expires = DateTime.Now.AddMinutes(30)
-                });
-
-                return RedirectToAction("Details");
-            }
-
-            return View(newUser);
-        }
     }
 }
