@@ -2,37 +2,43 @@
 
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Dodaj produkt";
 }
 
-<h1 class="mb-4">Dodaj nowy produkt</h1>
+<h1>Dodaj nowy produkt</h1>
 
-<form asp-action="CreateProduct" method="post" class="p-4 bg-light rounded shadow">
+<form asp-action="CreateProduct" method="post">
+
     <div class="mb-3">
-        <label asp-for="Name" class="form-label">Nazwa produktu</label>
+        <label for="Name" class="form-label">Nazwa produktu</label>
         <input asp-for="Name" class="form-control" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
+
     <div class="mb-3">
-        <label asp-for="Price" class="form-label">Cena</label>
+        <label for="Price" class="form-label">Cena</label>
         <input asp-for="Price" class="form-control" type="number" step="0.01" />
         <span asp-validation-for="Price" class="text-danger"></span>
     </div>
+
     <div class="mb-3">
-        <label asp-for="Quantity" class="form-label">Ilość</label>
+        <label for="Quantity" class="form-label">Ilość</label>
         <input asp-for="Quantity" class="form-control" type="number" />
         <span asp-validation-for="Quantity" class="text-danger"></span>
     </div>
-    <div class="mb-3">
-        <label asp-for="Image" class="form-label">Link do zdjęcia</label>
-        <input asp-for="Image" class="form-control" />
-        <span asp-validation-for="Image" class="text-danger"></span>
-    </div>
+
     <div class="mb-3">
         <label for="CategoryId" class="form-label">Kategoria</label>
-        <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select">
-            <option value="">Wybierz kategorię</option>
-        </select>
+        <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.Categories"></select>
         <span asp-validation-for="CategoryId" class="text-danger"></span>
     </div>
-    <button type="submit" class="btn btn-primary">Zapisz</button>
+
+    <div class="mb-3">
+        <label for="Image" class="form-label">Adres URL zdjęcia</label>
+        <input asp-for="Image" class="form-control" type="url" />
+        <span asp-validation-for="Image" class="text-danger"></span>
+    </div>
+
+
+    <button type="submit" class="btn btn-success">Dodaj produkt</button>
 </form>

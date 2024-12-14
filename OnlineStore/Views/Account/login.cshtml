@@ -4,6 +4,22 @@
 
 <h1>Logowanie</h1>
 
+@{
+    var validationErrors = ViewBag.ValidationErrors as List<string>;
+}
+
+@if (validationErrors != null && validationErrors.Any())
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var error in validationErrors)
+            {
+                <li>@error</li>
+            }
+        </ul>
+    </div>
+}
+
 @if (!string.IsNullOrEmpty(ViewBag.Error))
 {
     <div class="alert alert-danger">@ViewBag.Error</div>
@@ -20,5 +36,3 @@
     </div>
     <button type="submit" class="btn btn-primary">Zaloguj</button>
 </form>
-
-

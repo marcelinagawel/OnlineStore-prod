@@ -24,11 +24,38 @@ namespace OnlineStore.Controllers
         [HttpPost]
         public IActionResult Login(string email, string password)
         {
+            var errors = new List<string>();
+
+            // Ręczna walidacja
+            if (string.IsNullOrEmpty(email))
+            {
+                errors.Add("Proszę podać adres e-mail.");
+            }
+            else if (!email.Contains("@") || !email.Contains("."))
+            {
+                errors.Add("Nieprawidłowy format adresu e-mail.");
+            }
+
+            if (string.IsNullOrEmpty(password))
+            {
+                errors.Add("Proszę podać hasło.");
+            }
+            else if (password.Length < 5)
+            {
+                errors.Add("Hasło musi mieć co najmniej 5 znaków.");
+            }
+
+            if (errors.Any())
+            {
+                ViewBag.ValidationErrors = errors;
+                return View();
+            }
+
+            // Logika logowania
             var user = _context.Users.FirstOrDefault(u => u.Email == email && u.Password == password);
 
             if (user != null)
             {
-                // Ustaw ciasteczka z UserId i is_admin
                 Response.Cookies.Append("UserId", user.Id.ToString(), new CookieOptions
                 {
                     HttpOnly = true,
@@ -45,7 +72,7 @@ namespace OnlineStore.Controllers
                 }
                 else
                 {
-                    Response.Cookies.Delete("is_admin"); // Usuń ciasteczko, jeśli nie jest administratorem
+                    Response.Cookies.Delete("is_admin");
                 }
 
                 return RedirectToAction("Details");
@@ -54,6 +81,7 @@ namespace OnlineStore.Controllers
             ViewBag.Error = "Nieprawidłowy email lub hasło.";
             return View();
         }
+
 
         // Wylogowanie
         public IActionResult Logout()

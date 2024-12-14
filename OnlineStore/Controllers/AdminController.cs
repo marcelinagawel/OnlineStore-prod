@@ -95,7 +95,7 @@ namespace OnlineStore.Controllers
             ViewBag.Categories = _context.Categories
             .Select(c => new SelectListItem
             {
-                Value = c.Id.ToString(),
+                Value = c.Id.ToString(), // Wartość powinna być typu string, ale odpowiadająca int
                 Text = c.Name
             })
             .ToList();
@@ -105,24 +105,28 @@ namespace OnlineStore.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateProduct(Product product)
         {
-        
             CheckAdmin();
 
-         
-                _context.Products.Add(product);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Products");
             
+            ModelState.Remove("CategoryId");
+            ModelState.Remove("Category");
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Categories = _context.Categories
+                    .Select(c => new SelectListItem
+                    {
+                        Value = c.Id.ToString(),
+                        Text = c.Name
+                    })
+                    .ToList();
 
-            //ViewBag.Categories = _context.Categories
-            //    .Select(c => new SelectListItem
-            //    {
-            //        Value = c.Id.ToString(),
-            //        Text = c.Name
-            //    })
-            //    .ToList();
+                return View(product);
+            }
 
-            //return View(product);
+            _context.Products.Add(product); // utrwalenie danych EF
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Products");
         }
 
         public async Task<IActionResult> EditProduct(int id)
@@ -132,29 +136,65 @@ namespace OnlineStore.Controllers
             if (product == null) return NotFound();
 
             ViewBag.Categories = _context.Categories
-             .Select(c => new SelectListItem
-             {
-                 Value = c.Id.ToString(),
-                 Text = c.Name
-             })
-             .ToList();
+                .Select(c => new SelectListItem
+                {
+                    Value = c.Id.ToString(),
+                    Text = c.Name
+                })
+                .ToList();
             return View(product); // Widok: Views/Admin/EditProduct.cshtml
         }
+
 
         [HttpPost]
         public async Task<IActionResult> EditProduct(int id, Product product)
         {
             CheckAdmin();
 
+            
             if (id != product.Id)
             {
                 return BadRequest("Nieprawidłowe ID produktu.");
             }
 
-             _context.Entry(product).State = EntityState.Modified;
-             await _context.SaveChangesAsync();
-             return RedirectToAction("Products");
+        
+            ModelState.Remove("Category");
+
+            if (!ModelState.IsValid)
+            {
+                
+                ViewBag.Categories = _context.Categories
+                    .Select(c => new SelectListItem
+                    {
+                        Value = c.Id.ToString(),
+                        Text = c.Name
+                    })
+                    .ToList();
+
+                return View(product); 
+            }
+
+            try
+            {
+             
+                _context.Entry(product).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Products");
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+             
+                if (!_context.Products.Any(p => p.Id == id))
+                {
+                    return NotFound("Nie znaleziono produktu o podanym ID.");
+                }
+                else
+                {
+                    throw; // Rzuć wyjątek dla innych błędów
+                }
+            }
         }
+
 
         public async Task<IActionResult> DeleteProduct(int id)
         {
@@ -186,9 +226,19 @@ namespace OnlineStore.Controllers
         public async Task<IActionResult> CreateCategory(Category category)
         {
             CheckAdmin();
+
+            ModelState.Remove("Products");
+
+            if (!ModelState.IsValid)
+            {
+                return View(category);
+            }
+
             _context.Categories.Add(category);
             await _context.SaveChangesAsync();
             return RedirectToAction("Categories");
+            
+        
         }
 
         public async Task<IActionResult> EditCategory(int id)
@@ -205,6 +255,13 @@ namespace OnlineStore.Controllers
         public async Task<IActionResult> EditCategory(int id, Category category)
         {
             CheckAdmin();
+
+            ModelState.Remove("Products");
+
+            if (!ModelState.IsValid)
+            {
+                return View(category);
+            }
 
             if (id != category.Id)
             {

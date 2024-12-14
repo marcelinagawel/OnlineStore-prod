@@ -12,15 +12,18 @@ namespace OnlineStore.Models
 
         [Required]
         [StringLength(100)]
+       
         public string Email { get; set; }
 
         [Required]
-        [StringLength(100)]
+       
+      
         public string Password { get; set; }
 
         [Required]
         public bool IsAdmin { get; set; } // Nowe pole: Czy użytkownik jest administratorem
 
         public ICollection<Order> Orders { get; set; } // Zamówienia użytkownika
+
     }
 }
